@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PartyOrganiserWebApp.Data;
 using PartyOrganiserWebApp.Models;
+using PartyOrganiserWebApp.ViewModels;
 
 namespace PartyOrganiserWebApp.Controllers
 {
@@ -20,10 +21,30 @@ namespace PartyOrganiserWebApp.Controllers
         }
 
         // GET: PartyAttendances
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            var partyOrganiserWebAppContext = _context.PartyAttendance.Include(p => p.Party).Include(p => p.Person);
-            return View(await partyOrganiserWebAppContext.ToListAsync());
+            if (id == null)
+            {
+                var partyOrganiserWebAppContext = _context.PartyAttendance.Include(p => p.Party).Include(p => p.Person);
+                return View(await partyOrganiserWebAppContext.ToListAsync());
+            }
+
+            if(_context.Parties == null)
+            {
+                return NotFound();
+            }
+
+            var party = await _context.Parties.FindAsync(id);
+            if (party == null)
+            {
+                return NotFound();
+            }
+
+            var attendants = await _context.PartyAttendance.Where(x => x.PartyId == id).Include(p => p.Drink).Include(p => p.Person).ToListAsync();
+
+            PartyAttendantsViewModel vm = new PartyAttendantsViewModel(attendants, party);
+            return View(vm);
+            
         }
 
         // GET: PartyAttendances/Details/5
@@ -52,7 +73,6 @@ namespace PartyOrganiserWebApp.Controllers
             PartyAttendance partyAttendance = new PartyAttendance();
             partyAttendance.PartyId = partyId;
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName");
-            ViewData["ReturnURL"] = Request.Headers["Referer"].ToString();
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name");
             return View(partyAttendance);
         }
@@ -62,13 +82,13 @@ namespace PartyOrganiserWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PersonId,DrinkId,PartyId")] PartyAttendance partyAttendance, string returnURL)
+        public async Task<IActionResult> Create([Bind("Id,PersonId,DrinkId,PartyId")] PartyAttendance partyAttendance)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(partyAttendance);
                 await _context.SaveChangesAsync();
-                return Redirect(returnURL);
+                return RedirectToAction(nameof(Index), new {id = partyAttendance.PartyId});
             }
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName", partyAttendance.PersonId);
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
@@ -76,6 +96,7 @@ namespace PartyOrganiserWebApp.Controllers
             return View(partyAttendance);
         }
 
+      
         // GET: PartyAttendances/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

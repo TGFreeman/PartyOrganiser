@@ -46,6 +46,8 @@ namespace PartyOrganiserWebApp.Controllers
         // GET: People/Create
         public IActionResult Create()
         {
+
+            ViewData["ReturnURL"] = Request.Headers["Referer"].ToString();
             return View();
         }
 
