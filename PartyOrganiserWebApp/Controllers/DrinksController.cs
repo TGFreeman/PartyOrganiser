@@ -46,6 +46,7 @@ namespace PartyOrganiserWebApp.Controllers
         // GET: Drinks/Create
         public IActionResult Create()
         {
+            ViewData["ReturnURL"] = Request.Headers["Referer"].ToString();
             return View();
         }
 
@@ -54,13 +55,13 @@ namespace PartyOrganiserWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Drink drink)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Drink drink, string returnURL)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(drink);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect(returnURL);
             }
             return View(drink);
         }
