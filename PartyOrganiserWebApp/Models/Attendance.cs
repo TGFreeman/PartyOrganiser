@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public Person Person { get; set; }
-        public Event Party { get; set; }
+        public BaseParty Party { get; set; }
 
     }
 }

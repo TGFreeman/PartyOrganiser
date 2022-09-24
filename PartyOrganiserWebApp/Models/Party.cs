@@ -1,6 +1,6 @@
 ﻿namespace PartyOrganiserWebApp.Models
 {
-    public class Party : Event
+    public class Party : BaseParty
     {
         public PartyAttendance AddAttendance(Person guest, Drink drink)
         {

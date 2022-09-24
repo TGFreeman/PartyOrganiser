@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="People.sql" />
-    <Build Include="Events.sql" />
+    <Build Include="Parties.sql" />
     <Build Include="Attendances.sql" />
     <Build Include="Drinks.sql" />
   </ItemGroup>
