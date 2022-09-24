@@ -6,7 +6,7 @@
     [DrinkId] INT NULL, 
     [Discriminator] NVARCHAR(MAX) NOT NULL, 
         PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Attendances_Person] FOREIGN KEY ([PersonId]) REFERENCES [People]([Id]), 
-    CONSTRAINT [FK_Attendances_Party] FOREIGN KEY ([PartyId]) REFERENCES [BaseParty]([Id]), 
-    CONSTRAINT [FK_Attendances_Drink] FOREIGN KEY ([DrinkId]) REFERENCES [Drinks]([Id])
+    CONSTRAINT [FK_Attendances_Person] FOREIGN KEY ([PersonId]) REFERENCES [People]([Id]) ON DELETE CASCADE, 
+    CONSTRAINT [FK_Attendances_Party] FOREIGN KEY ([PartyId]) REFERENCES [BaseParty]([Id]) ON DELETE CASCADE, 
+    CONSTRAINT [FK_Attendances_Drink] FOREIGN KEY ([DrinkId]) REFERENCES [Drinks]([Id]) ON DELETE CASCADE
 )

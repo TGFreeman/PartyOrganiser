@@ -23,6 +23,7 @@
                 <select asp-for="DrinkId" class="form-control" asp-items="ViewBag.DrinkId"></select>
                 <span asp-validation-for="DrinkId" class="text-danger"></span>
             </div>
+            @Html.Hidden("PartyId", Model.PartyId, new{ @id = "PartyId" })
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

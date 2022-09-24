@@ -72,7 +72,8 @@ namespace PartyOrganiserWebApp.Controllers
         {
             PartyAttendance partyAttendance = new PartyAttendance();
             partyAttendance.PartyId = partyId;
-            ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName");
+            
+            ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name");
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name");
             return View(partyAttendance);
         }
@@ -90,7 +91,7 @@ namespace PartyOrganiserWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), new {id = partyAttendance.PartyId});
             }
-            ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName", partyAttendance.PersonId);
+            ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name", partyAttendance.PersonId);
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
 
             return View(partyAttendance);
@@ -110,8 +111,8 @@ namespace PartyOrganiserWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["PartyId"] = new SelectList(_context.Set<BaseParty>(), "Id", "Discriminator", partyAttendance.PartyId);
-            ViewData["PersonId"] = new SelectList(_context.People, "Id", "Id", partyAttendance.PersonId);
+            ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name", partyAttendance.PersonId);
+            ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
             return View(partyAttendance);
         }
 
@@ -120,7 +121,7 @@ namespace PartyOrganiserWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PersonId,PartyId")] PartyAttendance partyAttendance)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PersonId,PartyId,DrinkId")] PartyAttendance partyAttendance)
         {
             if (id != partyAttendance.Id)
             {
@@ -145,10 +146,10 @@ namespace PartyOrganiserWebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
             }
-            ViewData["PartyId"] = new SelectList(_context.Set<BaseParty>(), "Id", "Discriminator", partyAttendance.PartyId);
-            ViewData["PersonId"] = new SelectList(_context.People, "Id", "Id", partyAttendance.PersonId);
+            ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name", partyAttendance.PersonId);
+            ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
             return View(partyAttendance);
         }
 
@@ -188,6 +189,11 @@ namespace PartyOrganiserWebApp.Controllers
             }
             
             await _context.SaveChangesAsync();
+            if (partyAttendance != null)
+            {
+                //check to keep delete as idempotent
+                return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
+            }
             return RedirectToAction(nameof(Index));
         }
 

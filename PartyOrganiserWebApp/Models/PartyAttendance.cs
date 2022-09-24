@@ -7,7 +7,6 @@ namespace PartyOrganiserWebApp.Models
 {
     public class PartyAttendance : Attendance
     {
-        
         public Drink? Drink { get; set; }
         public int DrinkId { get; set; }
     }
