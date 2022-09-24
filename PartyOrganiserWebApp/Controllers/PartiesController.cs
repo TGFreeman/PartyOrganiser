@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PartyOrganiserWebApp.Data;
 using PartyOrganiserWebApp.Models;
+using PartyOrganiserWebApp.ViewModels;
 
 namespace PartyOrganiserWebApp.Controllers
 {
@@ -64,6 +65,25 @@ namespace PartyOrganiserWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(party);
+        }
+
+        public async Task<IActionResult> Attendants(int? id)
+        {
+            if (id == null || _context.Parties == null)
+            {
+                return NotFound();
+            }
+
+            var party = await _context.Parties.FindAsync(id);
+            if (party == null)
+            {
+                return NotFound();
+            }
+
+            var attendants = await _context.PartyAttendance.Where(x => x.PartyId == id).Include(p => p.Drink).Include(p => p.Person).ToListAsync();
+
+            PartyAttendantsViewModel vm = new PartyAttendantsViewModel(attendants , party);
+            return View(vm);
         }
 
         // GET: Parties/Edit/5
