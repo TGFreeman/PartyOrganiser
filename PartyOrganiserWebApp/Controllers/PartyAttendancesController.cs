@@ -52,7 +52,7 @@ namespace PartyOrganiserWebApp.Controllers
             PartyAttendance partyAttendance = new PartyAttendance();
             partyAttendance.PartyId = partyId;
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName");
-
+            ViewData["ReturnURL"] = Request.Headers["Referer"].ToString();
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name");
             return View(partyAttendance);
         }
@@ -62,13 +62,13 @@ namespace PartyOrganiserWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PersonId,DrinkId,PartyId")] PartyAttendance partyAttendance)
+        public async Task<IActionResult> Create([Bind("Id,PersonId,DrinkId,PartyId")] PartyAttendance partyAttendance, string returnURL)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(partyAttendance);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect(returnURL);
             }
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName", partyAttendance.PersonId);
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
