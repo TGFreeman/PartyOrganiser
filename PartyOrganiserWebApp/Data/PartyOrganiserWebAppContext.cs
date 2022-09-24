@@ -18,11 +18,8 @@ namespace PartyOrganiserWebApp.Data
         public DbSet<PartyOrganiserWebApp.Models.Drink> Drinks { get; set; } = default!;
         public DbSet<PartyOrganiserWebApp.Models.Person> People { get; set; } = default!;
         public DbSet<PartyOrganiserWebApp.Models.Attendance> Attendances { get; set; } = default!;
+        public DbSet<PartyOrganiserWebApp.Models.PartyAttendance> PartyAttendance { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            
-           
-    }
+      
     }
 }

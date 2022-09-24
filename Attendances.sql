@@ -1,11 +1,12 @@
-﻿CREATE TABLE [dbo].[Attendance]
+﻿CREATE TABLE [dbo].[Attendances]
 (
-	[Id] INT NOT NULL PRIMARY KEY, 
+		[Id] INT IDENTITY(1,1) NOT NULL , 
     [PersonId] INT NOT NULL, 
-    [EventId] INT NOT NULL, 
+    [PartyId] INT NOT NULL, 
     [DrinkId] INT NULL, 
     [Discriminator] NVARCHAR(MAX) NOT NULL, 
-    CONSTRAINT [FK_Attendance_Person] FOREIGN KEY ([PersonId]) REFERENCES [Person]([Id]), 
-    CONSTRAINT [FK_Attendance_Event] FOREIGN KEY ([EventId]) REFERENCES [BaseParty]([Id]), 
-    CONSTRAINT [FK_Attendance_Drink] FOREIGN KEY ([DrinkId]) REFERENCES [Drink]([Id])
+        PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Attendances_Person] FOREIGN KEY ([PersonId]) REFERENCES [People]([Id]), 
+    CONSTRAINT [FK_Attendances_Party] FOREIGN KEY ([PartyId]) REFERENCES [BaseParty]([Id]), 
+    CONSTRAINT [FK_Attendances_Drink] FOREIGN KEY ([DrinkId]) REFERENCES [Drinks]([Id])
 )

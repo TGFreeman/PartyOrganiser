@@ -8,6 +8,6 @@ namespace PartyOrganiserWebApp.Models
     public class PartyAttendance : Attendance
     {
         
-        public Drink Drink { get; set; }
+        public Drink? Drink { get; set; }
     }
 }

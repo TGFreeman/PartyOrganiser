@@ -63,4 +63,7 @@
     <Build Include="Attendances.sql" />
     <Build Include="Drinks.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="PartyOrganiserDatabase.refactorlog" />
+  </ItemGroup>
 </Project>
