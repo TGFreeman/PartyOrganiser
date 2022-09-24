@@ -9,5 +9,6 @@ namespace PartyOrganiserWebApp.Models
     {
         
         public Drink? Drink { get; set; }
+        public int DrinkId { get; set; }
     }
 }
