@@ -51,7 +51,6 @@ namespace PartyOrganiserWebApp.Controllers
         {
             PartyAttendance partyAttendance = new PartyAttendance();
             partyAttendance.PartyId = partyId;
-            ViewData["PartyId"] = new SelectList(_context.Set<BaseParty>(), "Id", "Name");
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName");
             return View(partyAttendance);
         }
@@ -69,7 +68,6 @@ namespace PartyOrganiserWebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PartyId"] = new SelectList(_context.Set<BaseParty>(), "Id", "Name", partyAttendance.PartyId);
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "FirstName", partyAttendance.PersonId);
             return View(partyAttendance);
         }
