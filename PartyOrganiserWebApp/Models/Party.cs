@@ -1,10 +1,17 @@
 ﻿namespace PartyOrganiserWebApp.Models
 {
-    public class Party
+    public class Party : Event
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime StartDate { get; set; }
+        public PartyAttendance AddAttendance(Person guest, Drink drink)
+        {
+            PartyAttendance partyAttendance = new PartyAttendance
+            {
+                Person = guest,
+                Drink = drink,
+                Party = this
+            };
+            return partyAttendance;
+        }
 
     }
 }
