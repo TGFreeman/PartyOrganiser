@@ -14,6 +14,9 @@ namespace PartyOrganiserWebApp.Data
         {
         }
 
-        public DbSet<PartyOrganiserWebApp.Models.Party> Party { get; set; } = default!;
+        public DbSet<PartyOrganiserWebApp.Models.Party> Parties { get; set; } = default!;
+        public DbSet<PartyOrganiserWebApp.Models.Drink> Drinks { get; set; } = default!;
+        public DbSet<PartyOrganiserWebApp.Models.Person> People { get; set; } = default!;
+        public DbSet<PartyOrganiserWebApp.Models.Attendance> Attendances { get; set; } = default!;
     }
 }
