@@ -25,16 +25,13 @@ namespace PartyOrganiserWebApp.Validators
             {
                 throw new ArgumentNullException(nameof(partyAttendance.Drink));
             }
-            if (DuplicatePeopleAttending(partyAttendance.Person, partyAttendance.Party))
+            if (PartyAttendanceDuplicatePersonChecker.DuplicatePeopleAttending(partyAttendance.Person, partyAttendance.Party))
             {
                 return false;
             }
             return true;
         }
 
-        private static bool DuplicatePeopleAttending(Person attendee, BaseParty party)
-        {
-            return party.Attendances.Any(x => x.PersonId == attendee.Id);
-        }
+       
     }
 }
