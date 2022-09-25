@@ -7,7 +7,6 @@ namespace PartyOrganiserTests
     public class PersonTests : BasePartyOrganiserTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void PersonNameProperty()
         {
             Person person = CreateDefaultPerson();

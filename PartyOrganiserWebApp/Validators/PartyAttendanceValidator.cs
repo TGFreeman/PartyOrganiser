@@ -4,18 +4,28 @@ namespace PartyOrganiserWebApp.Validators
 {
     public static class PartyAttendanceValidator
     {
-        public static bool Validate(PartyAttendance partyAttendance, BaseParty party)
+        public static bool Validate(PartyAttendance partyAttendance)
         {
-            if (party == null)
-            {
-                throw new ArgumentNullException(nameof(party));
-            }
+           
             if(partyAttendance == null)
             {
                 throw new ArgumentNullException(nameof(partyAttendance));
             }
+            if(partyAttendance.Person == null)
+            {
+                throw new ArgumentNullException(nameof(partyAttendance.Person));
+            }
 
-            if(DuplicatePeopleAttending(partyAttendance.Person, party))
+            if (partyAttendance.Party == null)
+            {
+                throw new ArgumentNullException(nameof(partyAttendance.Party));
+            }
+
+            if (partyAttendance.Drink == null)
+            {
+                throw new ArgumentNullException(nameof(partyAttendance.Drink));
+            }
+            if (DuplicatePeopleAttending(partyAttendance.Person, partyAttendance.Party))
             {
                 return false;
             }

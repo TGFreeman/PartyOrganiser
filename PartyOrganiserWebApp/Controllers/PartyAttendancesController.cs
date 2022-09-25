@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PartyOrganiserWebApp.Data;
 using PartyOrganiserWebApp.Models;
+using PartyOrganiserWebApp.Validators;
 using PartyOrganiserWebApp.ViewModels;
 
 namespace PartyOrganiserWebApp.Controllers
@@ -87,13 +88,24 @@ namespace PartyOrganiserWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(partyAttendance);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
+                Party party = _context.Parties.FirstOrDefault(x => x.Id == partyAttendance.PartyId);
+                Person person = _context.People.FirstOrDefault(x => x.Id == partyAttendance.PersonId);
+              
+                if (party != null && person != null)
+                {
+                    partyAttendance.Person = person;
+                    partyAttendance.Party = party;
+                    if (PartyAttendanceValidator.Validate(partyAttendance))
+                    {
+                        _context.Add(partyAttendance);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
+                    }
+                }
             }
+
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name", partyAttendance.PersonId);
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
-
             return View(partyAttendance);
         }
 
@@ -130,23 +142,35 @@ namespace PartyOrganiserWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                Party party = _context.Parties.FirstOrDefault(x => x.Id == partyAttendance.PartyId);
+                Person person = _context.People.FirstOrDefault(x => x.Id == partyAttendance.PersonId);
+
+                if (party != null && person != null)
                 {
-                    _context.Update(partyAttendance);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PartyAttendanceExists(partyAttendance.Id))
+                    partyAttendance.Person = person;
+                    partyAttendance.Party = party;
+                    if (PartyAttendanceValidator.Validate(partyAttendance))
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        try
+                        {
+                            _context.Update(partyAttendance);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!PartyAttendanceExists(partyAttendance.Id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+
+                        return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
                     }
                 }
-                return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
             }
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name", partyAttendance.PersonId);
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);

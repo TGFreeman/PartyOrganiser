@@ -10,18 +10,13 @@ namespace PartyOrganiserTests
         public void DuplicatePeopleNotAllowed()
         {
             Party party = CreateDefaultParty();
-            Person guest1 = new Person
-            {
-                FirstName = "Guest",
-                LastName = "One",
-                Id = 1
-            };
+            Person guest1 = CreateDefaultPerson();
             var drink1 = CreateDefaultDrink();
             PartyAttendance att = new PartyAttendance(drink1, guest1, party);
             att.Id = 123;
 
 
-            bool validatorResult = PartyAttendanceValidator.Validate(att, party);
+            bool validatorResult = PartyAttendanceValidator.Validate(att);
             Assert.IsTrue(validatorResult);
             party.Attendances.Add(att);
             Assert.IsTrue(party.Attendances.Any(x => x.PersonId == guest1.Id));
@@ -30,7 +25,7 @@ namespace PartyOrganiserTests
             PartyAttendance att2 = new PartyAttendance(drink1, guest1, party);
             att.Id = 1234;
 
-            validatorResult = PartyAttendanceValidator.Validate(att2, party);
+            validatorResult = PartyAttendanceValidator.Validate(att2);
             Assert.IsFalse(validatorResult);
         }
         [TestMethod]
@@ -38,22 +33,41 @@ namespace PartyOrganiserTests
         public void NullPartyParameterThrowArgumentNullException()
         {
             Party party = CreateDefaultParty();
-            Person guest1 = new Person
-            {
-                FirstName = "Guest",
-                LastName = "One",
-                Id = 1
-            };
-            Drink drink1 = new Drink
-            {
-                Id = 1,
-                Name = "Water"
-            };
+            Person guest1 = CreateDefaultPerson();
+            Drink drink1 = CreateDefaultDrink();
             PartyAttendance att = new PartyAttendance(drink1, guest1, party);
             att.Id = 123;
+            att.Party = null;
 
+            bool validatorResult = PartyAttendanceValidator.Validate(att);
+        }
 
-            bool validatorResult = PartyAttendanceValidator.Validate(att, null);
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NullPersonParameterThrowArgumentNullException()
+        {
+            Party party = CreateDefaultParty();
+            Person guest1 = CreateDefaultPerson();
+            Drink drink1 = CreateDefaultDrink();
+            PartyAttendance att = new PartyAttendance(drink1, guest1, party);
+            att.Id = 123;
+            att.Person = null;
+
+            bool validatorResult = PartyAttendanceValidator.Validate(att);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void NullDrinkParameterThrowArgumentNullException()
+        {
+            Party party = CreateDefaultParty();
+            Person guest1 = CreateDefaultPerson();
+            Drink drink1 = CreateDefaultDrink();
+            PartyAttendance att = new PartyAttendance(drink1, guest1, party);
+            att.Id = 123;
+            att.Drink = null;
+
+            bool validatorResult = PartyAttendanceValidator.Validate(att);
         }
 
         [TestMethod]
@@ -62,7 +76,7 @@ namespace PartyOrganiserTests
         {
             Party party = CreateDefaultParty();
            
-            bool validatorResult = PartyAttendanceValidator.Validate(null, party);
+            bool validatorResult = PartyAttendanceValidator.Validate(null);
         }
 
     }
