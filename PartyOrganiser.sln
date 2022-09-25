@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PartyOrganiserDatabase", "PartyOrganiserDatabase.sqlproj", "{AD3DE1AC-79E8-4FA9-A00E-49466CD72B66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartyOrganiserWebApp", "PartyOrganiserWebApp\PartyOrganiserWebApp.csproj", "{11BAD317-A36D-418C-BEC7-9953E4C386B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartyOrganiserWebApp", "PartyOrganiserWebApp\PartyOrganiserWebApp.csproj", "{11BAD317-A36D-418C-BEC7-9953E4C386B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PartyOrganiserTests", "PartyOrganiserTests\PartyOrganiserTests.csproj", "{4A38A66C-672B-4865-980E-14DE18DBDB9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{11BAD317-A36D-418C-BEC7-9953E4C386B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11BAD317-A36D-418C-BEC7-9953E4C386B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11BAD317-A36D-418C-BEC7-9953E4C386B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A38A66C-672B-4865-980E-14DE18DBDB9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A38A66C-672B-4865-980E-14DE18DBDB9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A38A66C-672B-4865-980E-14DE18DBDB9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A38A66C-672B-4865-980E-14DE18DBDB9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

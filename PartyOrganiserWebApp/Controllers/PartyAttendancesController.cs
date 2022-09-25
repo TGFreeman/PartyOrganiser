@@ -29,7 +29,7 @@ namespace PartyOrganiserWebApp.Controllers
                 return View(await partyOrganiserWebAppContext.ToListAsync());
             }
 
-            if(_context.Parties == null)
+            if (_context.Parties == null)
             {
                 return NotFound();
             }
@@ -44,7 +44,7 @@ namespace PartyOrganiserWebApp.Controllers
 
             PartyAttendantsViewModel vm = new PartyAttendantsViewModel(attendants, party);
             return View(vm);
-            
+
         }
 
         // GET: PartyAttendances/Details/5
@@ -72,7 +72,7 @@ namespace PartyOrganiserWebApp.Controllers
         {
             PartyAttendance partyAttendance = new PartyAttendance();
             partyAttendance.PartyId = partyId;
-            
+
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name");
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name");
             return View(partyAttendance);
@@ -89,7 +89,7 @@ namespace PartyOrganiserWebApp.Controllers
             {
                 _context.Add(partyAttendance);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new {id = partyAttendance.PartyId});
+                return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
             }
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name", partyAttendance.PersonId);
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
@@ -97,7 +97,7 @@ namespace PartyOrganiserWebApp.Controllers
             return View(partyAttendance);
         }
 
-      
+
         // GET: PartyAttendances/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -187,7 +187,7 @@ namespace PartyOrganiserWebApp.Controllers
             {
                 _context.PartyAttendance.Remove(partyAttendance);
             }
-            
+
             await _context.SaveChangesAsync();
             if (partyAttendance != null)
             {
@@ -199,7 +199,7 @@ namespace PartyOrganiserWebApp.Controllers
 
         private bool PartyAttendanceExists(int id)
         {
-          return _context.PartyAttendance.Any(e => e.Id == id);
+            return _context.PartyAttendance.Any(e => e.Id == id);
         }
     }
 }
