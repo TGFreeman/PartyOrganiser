@@ -88,13 +88,14 @@ namespace PartyOrganiserWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                Party party = _context.Parties.FirstOrDefault(x => x.Id == partyAttendance.PartyId);
+                Party party = _context.Parties.Include(x=>x.Attendances).FirstOrDefault(x => x.Id == partyAttendance.PartyId);
                 Person person = _context.People.FirstOrDefault(x => x.Id == partyAttendance.PersonId);
-              
-                if (party != null && person != null)
+                Drink drink = _context.Drinks.FirstOrDefault(x => x.Id == partyAttendance.DrinkId);
+                if (party != null && person != null && drink != null)
                 {
                     partyAttendance.Person = person;
                     partyAttendance.Party = party;
+                    partyAttendance.Drink = drink;
                     if (PartyAttendanceValidator.Validate(partyAttendance))
                     {
                         _context.Add(partyAttendance);
@@ -142,35 +143,25 @@ namespace PartyOrganiserWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                Party party = _context.Parties.FirstOrDefault(x => x.Id == partyAttendance.PartyId);
-                Person person = _context.People.FirstOrDefault(x => x.Id == partyAttendance.PersonId);
-
-                if (party != null && person != null)
+                try
+                {       
+                    _context.Update(partyAttendance);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
                 {
-                    partyAttendance.Person = person;
-                    partyAttendance.Party = party;
-                    if (PartyAttendanceValidator.Validate(partyAttendance))
+                    if (!PartyAttendanceExists(partyAttendance.Id))
                     {
-                        try
-                        {
-                            _context.Update(partyAttendance);
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            if (!PartyAttendanceExists(partyAttendance.Id))
-                            {
-                                return NotFound();
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-
-                        return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
                     }
                 }
+
+                return RedirectToAction(nameof(Index), new { id = partyAttendance.PartyId });
+                
             }
             ViewData["PersonId"] = new SelectList(_context.People, "Id", "Name", partyAttendance.PersonId);
             ViewData["DrinkId"] = new SelectList(_context.Drinks, "Id", "Name", partyAttendance.DrinkId);
